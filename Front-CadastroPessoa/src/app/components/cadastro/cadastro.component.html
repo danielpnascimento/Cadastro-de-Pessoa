@@ -1,0 +1,466 @@
+<nav>
+  <ul class="nav nav-pills rounded-pill w-100 bg-light shadow-sm mb-4" role="tablist">
+    <li class="nav-item flex-fill">
+      <button class="nav-link rounded-pill w-100" [class.active]="activeTab==='dados'"
+        (click)="setActiveTab('dados')">Dados</button>
+    </li>
+    <li class="nav-item flex-fill">
+      <button class="nav-link rounded-pill w-100" [class.active]="activeTab==='endereco'"
+        (click)="setActiveTab('endereco')">Endereço</button>
+    </li>
+  </ul>
+</nav>
+
+<form class="text-center" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Dados -->
+  <div *ngIf="activeTab==='dados'">
+
+    <div class="d-flex align-items-center mb-2">
+
+      <!-- Foto de Perfil -->
+      <div class="me-3 my-1 mb-3" (click)="fileInput.click()">
+
+        <!-- Mostra a foto se houver -->
+        <img *ngIf="fotoPreview; else defaultIcon" [src]="fotoPreview" alt="Foto"
+          class="img-thumbnail rounded-pill shadow-sm img-fluid object-fit-cover " />
+        <!-- Ícone default -->
+        <ng-template #defaultIcon>
+          <i class="bi bi-person-fill-add rounded-pill ps-3 fs-1"></i>
+        </ng-template>
+
+        <!-- Input para adcionar a foto -->
+        <input class="d-none" #fileInput type="file" (change)="onFileChange($any(fileInput.files))" accept="image/*" />
+      </div>
+
+      <!-- Nome -->
+      <div class="form-outline w-100 mb-3">
+        <input type="text" id="nome" formControlName="nome" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('nome')?.invalid && form.get('nome')?.touched,
+      'is-valid': form.get('nome')?.valid && form.get('nome')?.touched
+    }" (keypress)="permitirSomenteLetras($event)" (paste)="onPasteLetters($event)" />
+
+        <label for="nome" class="form-label nowrap-text">Nome completo</label>
+
+        <div *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched"
+          class="invalid-feedback d-block  nowrap-text">
+          Informe um nome válido (somente letras)
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+      <!-- CPF -->
+      <div class="form-outline w-cpf me-3">
+        <input type="text" id="cpf" formControlName="cpf" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('cpf')?.invalid && form.get('cpf')?.touched,
+      'is-valid': form.get('cpf')?.valid && form.get('cpf')?.touched
+      }" />
+        <label class="form-label nowrap-text" for="cpf">CPF</label>
+
+        <div *ngIf="form.get('cpf')?.invalid && form.get('cpf')?.touched" class="invalid-feedback d-block nowrap-text">
+          CPF inválido
+        </div>
+      </div>
+
+      <!-- RG -->
+      <div class="form-outline w-rg me-3">
+        <input type="text" id="rg" formControlName="rg" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('rg')?.invalid && form.get('rg')?.touched,
+      'is-valid': form.get('rg')?.valid && form.get('rg')?.touched
+    }" />
+        <label class="form-label nowrap-text" for="rg">RG</label>
+
+        <div *ngIf="form.get('rg')?.invalid && form.get('rg')?.touched" class="invalid-feedback d-block nowrap-text">
+          RG inválido
+        </div>
+      </div>
+
+      <!-- Uf -->
+      <div class="form-outline select-outline w-uf">
+        <select id="uf" formControlName="uf" class="form-control rounded-pill shadow-sm bg-light" placeholder=" "
+          required [ngClass]="{
+            'is-invalid': form.get('uf')?.invalid && form.get('uf')?.touched,
+            'is-valid': form.get('uf')?.valid && form.get('uf')?.touched
+          }">
+
+          <option value="" disabled selected hidden></option> <!-- placeholder vazio -->
+          <option *ngFor="let estado of estadosEmissorRG" [value]="estado.value">
+            {{ estado.text }}
+          </option>
+        </select>
+        <label class="form-label nowrap-text" for="uf">UF</label>
+
+        <div *ngIf="form.get('uf')?.invalid && form.get('uf')?.touched" class="invalid-feedback d-block nowrap-text">
+          UF inválido
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+      <!-- Naturalidade -->
+      <div class="form-outline select-outline w-pais me-3">
+        <select id="pais" formControlName="pais" class="form-control rounded-pill shadow-sm bg-light" placeholder=" "
+          required [ngClass]="{
+      'is-invalid': form.get('pais')?.invalid && form.get('pais')?.touched,
+      'is-valid': form.get('pais')?.valid && form.get('pais')?.touched
+    }">
+          <option value="" disabled selected hidden></option> <!-- placeholder vazio -->
+          <option *ngFor="let pais of paises" [value]="pais.value">
+            {{ pais.text }}
+          </option>
+        </select>
+        <label for="pais" class="form-label nowrap-text">País</label>
+
+        <div *ngIf="form.get('pais')?.invalid && form.get('pais')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Selecione um país
+        </div>
+      </div>
+
+      <!-- Data de Nascimento -->
+      <div class="form-outline w-nascimento me-3">
+        <input type="text" id="nascimento" formControlName="nascimento"
+          class="form-control rounded-pill shadow-sm bg-light" placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('nascimento')?.invalid && form.get('nascimento')?.touched,
+      'is-valid': form.get('nascimento')?.valid && form.get('nascimento')?.touched
+    }" />
+        <label for="nascimento" class="form-label nowrap-text ">Nascimento</label>
+
+        <div *ngIf="form.get('nascimento')?.invalid && form.get('nascimento')?.touched"
+          class="invalid-feedback d-block">
+          Data inválida
+        </div>
+      </div>
+
+      <!-- Sexo -->
+      <div class="form-outline select-outline w-sexo">
+        <select id="sexo" formControlName="sexo" class="form-control rounded-pill shadow-sm bg-light" placeholder=" "
+          required [ngClass]="{
+      'is-invalid': form.get('sexo')?.invalid && form.get('sexo')?.touched,
+      'is-valid': form.get('sexo')?.valid && form.get('sexo')?.touched
+    }">
+          <option value="" disabled selected hidden></option> <!-- placeholder vazio -->
+          <option *ngFor="let sexo of sexo" [value]="sexo.value">
+            {{ sexo.text }}
+          </option>
+        </select>
+        <label for="sexo" class="form-label nowrap-text">Sexo</label>
+
+        <div *ngIf="form.get('sexo')?.invalid && form.get('sexo')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Selecione
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+      <!-- Estado Civil -->
+      <div class="form-outline select-outline w-civil me-3">
+        <select id="civil" formControlName="civil" class="form-control rounded-pill shadow-sm bg-light" placeholder=" "
+          required [ngClass]="{
+      'is-invalid': form.get('civil')?.invalid && form.get('civil')?.touched,
+      'is-valid': form.get('civil')?.valid && form.get('civil')?.touched
+    }">
+          <option value="" disabled selected hidden></option> <!-- placeholder vazio -->
+          <option *ngFor="let civil of civil" [value]="civil.value">
+            {{ civil.text }}
+          </option>
+        </select>
+        <label for="civil" class="form-label nowrap-text">Estado civil</label>
+
+        <div *ngIf="form.get('civil')?.invalid && form.get('civil')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Selecione um estado
+        </div>
+      </div>
+
+      <!-- Escolaridade -->
+      <div class="form-outline select-outline w-escolaridade me-3">
+        <select id="escolaridade" formControlName="escolaridade" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+    'is-invalid': form.get('escolaridade')?.invalid && form.get('escolaridade')?.touched,
+    'is-valid': form.get('escolaridade')?.valid && form.get('escolaridade')?.touched
+    }">
+          <option value="" disabled selected hidden></option> <!-- placeholder vazio -->
+          <option *ngFor="let escolaridade of escolaridade" [value]="escolaridade.value">
+            {{ escolaridade.text }}
+          </option>
+        </select>
+        <label for="escolaridade" class="form-label nowrap-text">Escolaridade</label>
+
+        <div *ngIf="form.get('escolaridade')?.invalid && form.get('escolaridade')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Selecione uma escolaridade
+        </div>
+      </div>
+
+      <!-- Profissão -->
+      <div class="form-outline select-outline w-profissao">
+        <select id="profissao" formControlName="profissao" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+    'is-invalid': form.get('profissao')?.invalid && form.get('profissao')?.touched,
+    'is-valid': form.get('profissao')?.valid && form.get('profissao')?.touched
+  }">
+          <option value="" disabled selected hidden></option> <!-- placeholder vazio -->
+          <option *ngFor="let profissao of profissao" [value]="profissao.value">
+            {{ profissao.text }}
+          </option>
+        </select>
+        <label for="profissao" class="form-label nowrap-text">Profissão</label>
+
+        <div *ngIf="form.get('profissao')?.invalid && form.get('profissao')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Selecione uma profissão
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-flex justify-content-center mb-2">
+      <!-- Telefone -->
+      <div class="form-outline w-telefone me-3">
+        <input type="tel" id="telefone" formControlName="telefone" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('telefone')?.invalid && form.get('telefone')?.touched,
+      'is-valid': form.get('telefone')?.valid && form.get('telefone')?.touched
+    }" (keypress)="permitirSomenteNumeros($event)" />
+
+        <label class="form-label nowrap-text" for="telefone">Telefone</label>
+
+        <div *ngIf="form.get('telefone')?.invalid && form.get('telefone')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Telefone inválido
+        </div>
+      </div>
+
+      <!-- Telefone recado -->
+      <div class="form-outline w-telefone">
+        <input type="tel" id="telefoneRec" formControlName="telefoneRec"
+          class="form-control rounded-pill shadow-sm bg-light" placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('telefoneRec')?.invalid && form.get('telefoneRec')?.touched,
+      'is-valid': form.get('telefoneRec')?.valid && form.get('telefoneRec')?.touched
+    }" (keypress)="permitirSomenteNumeros($event)" />
+
+        <label class="form-label nowrap-text" for="telefoneRec">Telefone Recado</label>
+
+        <div *ngIf="form.get('telefoneRec')?.invalid && form.get('telefoneRec')?.touched"
+          class="invalid-feedback d-block">
+          Telefone inválido
+        </div>
+      </div>
+    </div>
+
+    <!-- Nome completo do Pai -->
+    <div class="form-outline w-100 ">
+      <input type="text" id="nomepai" formControlName="nomepai" class="form-control rounded-pill shadow-sm bg-light"
+        placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('nomepai')?.invalid && form.get('nomepai')?.touched,
+      'is-valid': form.get('nomepai')?.valid && form.get('nomepai')?.touched
+    }" (keypress)="permitirSomenteLetras($event)" (paste)="onPasteLetters($event)" />
+
+      <label for="nomepai" class="form-label nowrap-text">Nome completo do Pai</label>
+
+      <div *ngIf="form.get('nomepai')?.invalid && form.get('nomepai')?.touched"
+        class="invalid-feedback d-block nowrap-text">
+        Informe um nome válido (somente letras)
+      </div>
+    </div>
+
+    <!-- Nome completo da Mãe -->
+    <div class="form-outline w-100">
+      <input type="text" id="nomemae" formControlName="nomemae" class="form-control rounded-pill shadow-sm bg-light"
+        placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('nomemae')?.invalid && form.get('nomemae')?.touched,
+      'is-valid': form.get('nomemae')?.valid && form.get('nomemae')?.touched
+    }" (keypress)="permitirSomenteLetras($event)" (paste)="onPasteLetters($event)" />
+
+      <label for="nomemae" class="form-label nowrap-text">Nome completo do Mãe</label>
+
+      <div *ngIf="form.get('nomemae')?.invalid && form.get('nomemae')?.touched"
+        class="invalid-feedback d-block nowrap-text">
+        Informe um nome válido (somente letras)
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-outline w-100">
+      <input type="email" id="email" formControlName="email"
+        class="form-control rounded-pill shadow-sm bg-light nowrap-text" placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('email')?.invalid && form.get('email')?.touched,
+      'is-valid': form.get('email')?.valid && form.get('email')?.touched
+    }" />
+      <label for="email" class="form-label nowrap-text">Email</label>
+
+      <div *ngIf="form.get('nomepai')?.invalid && form.get('nomepai')?.touched"
+        class="invalid-feedback d-block nowrap-text">
+        Informe um nome válido (somente letras)
+      </div>
+    </div>
+
+    <div class="mt-5 ">
+      <button type="submit" class="btn btn-outline-primary  rounded-pill shadow-sm mb-5 w-100">Salvar</button>
+    </div>
+
+  </div>
+
+  <!-- Endereço -->
+  <div *ngIf="activeTab==='endereco'">
+    <!-- Cep -->
+    <div class="form-outline w-cep mb-4">
+      <input type="text" id="cep" formControlName="cep" class="form-control rounded-pill shadow-sm bg-light"
+        placeholder=" " required [ngClass]="{
+  'is-invalid': (form.get('cep')?.invalid || erroCEP) && form.get('cep')?.touched,
+  'is-valid': form.get('cep')?.valid && !erroCEP && form.get('cep')?.touched
+}" (blur)="buscarCEP()" />
+
+      <label class="form-label nowrap-text" for="cep">Cep</label>
+
+      <div *ngIf="loadingCEP" class="text-info small mt-1">
+        Buscando endereço...
+      </div>
+
+      <div *ngIf="erroCEP" class="invalid-feedback d-block nowrap-text">
+        {{ erroCEP }}
+      </div>
+
+      <div *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched" class="invalid-feedback d-block nowrap-text">
+        Cep inválido.
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <!-- Rua -->
+      <div class="form-outline w-100 ">
+        <input type="text" id="rua" formControlName="rua" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+      'is-invalid': form.get('rua')?.invalid && form.get('rua')?.touched,
+      'is-valid': form.get('rua')?.valid && form.get('rua')?.touched
+    }" />
+        <label for="rua" class="form-label nowrap-text">Rua ou Avenida</label>
+
+        <div *ngIf="form.get('rua')?.invalid && form.get('rua')?.touched" class="invalid-feedback d-block nowrap-text">
+          Informe um nome válido (somente letras)
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center  mb-2">
+      <!-- Bairro -->
+      <div class="form-outline w-75 me-3">
+        <input type="text" id="bairro" formControlName="bairro" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+        'is-invalid': form.get('bairro')?.invalid && form.get('bairro')?.touched,
+        'is-valid': form.get('bairro')?.valid && form.get('bairro')?.touched
+      }" />
+        <label for="bairro" class="form-label nowrap-text">Bairro</label>
+
+        <div *ngIf="form.get('bairro')?.invalid && form.get('bairro')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Bairro Inválido
+        </div>
+      </div>
+
+      <!-- Numero -->
+      <div class="form-outline w-numero ">
+        <input type="number" id="numero" formControlName="numero" class="form-control rounded-pill shadow-sm bg-light"
+          placeholder=" " required [ngClass]="{
+        'is-invalid': form.get('numero')?.invalid && form.get('numero')?.touched,
+        'is-valid': form.get('numero')?.valid && form.get('numero')?.touched
+      }" />
+        <label for="numero" class="form-label nowrap-text">N°</label>
+
+        <div *ngIf="form.get('numero')?.invalid && form.get('numero')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          N° Inválido
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center mb-2">
+
+      <!-- Cidades -->
+      <div class="form-outline select-outline  w-cidades me-3 ">
+        <select id="cidades" formControlName="cidades" class="form-control rounded-pill shadow-sm bg-light" [ngClass]="{
+      'is-invalid': form.get('cidades')?.invalid && form.get('cidades')?.touched,
+      'is-valid': form.get('cidades')?.valid && form.get('cidades')?.touched
+    }" required>
+
+          <!-- Mostra o valor do CEP se não estiver no array -->
+          <option [value]="cidadeAtual" *ngIf="isCidadeAtualForaDaLista()">
+            {{ cidadeAtual }}
+          </option>
+
+          <!-- Lista normal de cidades -->
+          <option *ngFor="let cidadeItem of cidades" [value]="cidadeItem.value">
+            {{ cidadeItem.text }}
+          </option>
+
+        </select>
+        <label for="cidades" class="form-label nowrap-text">Cidade</label>
+
+        <div *ngIf="form.get('cidades')?.invalid && form.get('cidades')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Cidade Inválida
+        </div>
+      </div>
+
+      <!-- Estado -->
+      <div class="form-outline select-outline w-estados me-3">
+        <select id="estados" formControlName="estados" class="form-control rounded-pill shadow-sm bg-light" [ngClass]="{
+          'is-invalid': form.get('estados')?.invalid && form.get('estados')?.touched,
+      'is-valid': form.get('estados')?.valid && form.get('estados')?.touched
+    }" required>
+          <option value=""> </option>
+          <option *ngFor="let estados of estados" [value]="estados.value">
+            {{ estados.text }}
+          </option>
+        </select>
+        <label for="estados" class="form-label nowrap-text">Estado</label>
+
+        <div *ngIf="form.get('estados')?.invalid && form.get('estados')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Selecione
+        </div>
+      </div>
+
+      <!-- Complemento de residência-->
+      <div class="form-outline w-50 ">
+        <input type="text" id="complemento" formControlName="complemento" placeholder=" "
+          class="form-control rounded-pill shadow-sm bg-light" [ngClass]="{
+        'is-invalid': form.get('complemento')?.invalid && form.get('complemento')?.touched,
+        'is-valid': form.get('complemento')?.valid && form.get('complemento')?.touched
+        }" required />
+        <label for="complemento" class="form-label nowrap-text">Casa, Apto</label>
+        <div *ngIf="form.get('complemento')?.invalid && form.get('complemento')?.touched"
+          class="invalid-feedback d-block nowrap-text">
+          Complemento
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Deixei com o rounded-6 pq para a caixa de texto o pill quebra demais na lateriais e vira um circulo.-->
+    <div class="form-outline mb-5">
+      <textarea type="text" id="textarea" formControlName="textarea" placeholder=" "
+        class="form-control rounded-6 shadow-sm bg-light" [ngClass]="{
+        'is-invalid': form.get('textarea')?.invalid && form.get('textarea')?.touched,
+        'is-valid': form.get('')?.valid && form.get('')?.touched
+        }" required></textarea>
+      <label for="textarea" class="form-label nowrap-text ">Referência: Travessa, Esquina, Av. ou Rua.</label>
+      <div *ngIf="form.get('textarea')?.invalid && form.get('textarea')?.touched"
+        class="invalid-feedback d-block nowrap-text">
+        Adcione uma informação de referência
+      </div>
+    </div>
+  </div>
+</form>

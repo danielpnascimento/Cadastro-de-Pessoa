@@ -1,0 +1,253 @@
+@import "bootstrap/scss/bootstrap.scss";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+// Ajuste personalizado para a largura dos campos
+.w-cpf,
+.w-rg,
+.w-pais,
+.w-nascimento,
+.w-escolaridade,
+.w-civil,
+.w-profissao,
+.w-cidades {
+  width: 12rem;
+}
+
+.w-numero,
+.w-uf,
+.w-sexo,
+.w-cep {
+  width: 8rem;
+}
+
+.w-estados {
+  width: 8rem;
+}
+
+// Foto de perfil ajustada para Cadastro e listagem
+.img-thumbnail {
+  width: 65px;
+}
+
+@media (max-width: 1024px) {
+  .img-thumbnail {
+    max-width: 60px;
+  }
+}
+
+// Efeito que faz o placeholder do mdb fique entre a linha superior do input
+// o bootstrap não tem esse efeito
+.form-outline {
+  position: relative;
+  margin-bottom: 1rem; // espaço entre os campos
+
+  .form-control {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+
+    &:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      background-color: #fff;
+    }
+    // Quando o placeholder não está visível (tem texto), ou está em foco, ou é válido
+    // (ex.: required com valor), o label flutua (mesmo comportamento do select)
+    &:not(:placeholder-shown) + label,
+    &:focus + label,
+    &:valid + label {
+      top: -0.7rem; // sobe acima da borda superior
+      left: 0.6rem; // distancia ele
+      font-size: 0.7rem;
+      color: #0d6efd;
+      background-color: #fff;
+      padding: 0 0.25rem;
+      transform: none;
+    }
+
+    // Caso Angular não detecte :valid
+    &[value]:not([value=""]) + label {
+      top: -0.1rem;
+      left: 0.4rem;
+      font-size: 0.7rem;
+      color: #0d6efd;
+      background-color: #fff;
+      padding: 0 0.25rem;
+      transform: none;
+    }
+  }
+
+  // Label padrão
+  label {
+    position: absolute;
+    top: 50%;
+    left: 1.2rem;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #6c757d;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+  }
+
+  // Para o modo editar o label não ficar em cima do texto
+  &.select-outline:focus-within label,
+  &.select-outline .form-control:focus + label,
+  &.select-outline .form-control:valid + label {
+    top: -0.7rem;
+    left: 0.6rem;
+  }
+
+  // leve sombra quando inválido em foco para indicar erro
+  .form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.12);
+  }
+}
+
+/////Select\\\\\
+// Mesmo modo do mdb igual do input acima, mas para select, sem show pq não funciona no select
+.select-outline {
+  position: relative;
+}
+
+.select-outline select.form-control {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%236c757d' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+// Label padrão (posição inicial igual ao input)
+.select-outline label {
+  position: absolute;
+  top: 50%;
+  left: 1.2rem;
+  transform: translateY(-50%); // Quando preenchido ele some para borda
+  font-size: 1rem;
+  color: #6c757d;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Label do :placeholder-shown que o select não tem e quando o select
+tem valor (valid) ou está em foco ele sobe e volta */
+.select-outline select.form-control:focus + label,
+.select-outline select.form-control:valid + label {
+  top: -0.3rem;
+  left: 0.4rem;
+  font-size: 0.7rem;
+  color: #0d6efd;
+  background-color: #fff;
+  padding: 0 0.25rem;
+}
+
+// Label volta ao centro se vazio e inválido
+.select-outline select.form-control:invalid + label {
+  top: 50%;
+  left: 1.2rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6c757d;
+  background-color: transparent;
+  padding: 0;
+}
+
+// Foco leve
+.select-outline select.form-control:focus {
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.12);
+}
+
+// Select múltiplo — sem seta
+.select-outline select.form-control[multiple] {
+  padding-right: 0.75rem;
+  background-image: none;
+}
+
+// Caso Angular não detecte :valid
+.select-outline select.form-control.has-value + label {
+  top: -0.1rem;
+  left: 0.6rem;
+  font-size: 0.7rem;
+  color: #0d6efd;
+  background-color: #fff;
+  padding: 0 0.25rem;
+}
+
+// ======== garantir que o label suba ao clicar/abrir o select ========
+// usa focus-within no container (robusto) + mantém fallback para select:focus
+.form-outline.select-outline:focus-within label,
+.form-outline.select-outline select.form-control:focus + label,
+.form-outline.select-outline select.form-control.has-value + label {
+  top: -0.7rem; // sobe acima ou metade da borda superior
+  left: 0.6rem;
+  font-size: 0.7rem;
+  color: #0d6efd;
+  background-color: #fff;
+  padding: 0 0.25rem;
+  transform: none;
+}
+
+// Ajuste responsivo para fonte nos campos vminimo, vfuido e vmaximo de forma suave
+input,
+select,
+textarea {
+  font-size: clamp(0.8rem, 1.7vw, 0.85rem) !important;
+}
+
+textarea {
+  height: 120px;
+}
+
+.nowrap-text {
+  // Deixa o btn de ações lado a lado
+  white-space: nowrap;
+  font-size: clamp(0.8rem, 1.7vw, 0.85rem) !important; // ajusta suavemente
+}
+
+// Efeito para o offcanvas
+.custom-offcanvas {
+  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s ease-in-out;
+}
+
+.offcanvas.offcanvas-end {
+  width: 500px !important; // aumenta a largura
+  max-width: 90vw; // evita ultrapassar a tela
+  transition: all 0.4s ease-in-out;
+}
+
+// Scroll vertical interno para a Tabela
+.table-wrapper {
+  max-height: 445px; // altura máxima da tabela
+  overflow-y: auto; // scroll vertical dentro da tabela
+  display: block;
+}
+
+// Para preencher a tela toda na largura em mobile
+@media (max-width: 576px) {
+  .offcanvas.offcanvas-end {
+    width: 100% !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    right: 0 !important;
+    left: 0 !important;
+  }
+
+  // Dropdown
+  @media (max-width: 767.98px) {
+    .force-center-mobile {
+      justify-content: center !important;
+    }
+  }
+}
