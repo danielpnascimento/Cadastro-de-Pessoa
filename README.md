@@ -1,8 +1,5 @@
 # 🚀 Módulo de Cadastro de Pessoa finalizado!
 
-
-
-
 ## 🛠 Construção
 **Front-end:**
 
