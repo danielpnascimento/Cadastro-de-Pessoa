@@ -37,7 +37,7 @@
 
 [Site de Resort](https://dnmontanharesort.netlify.app/)
 
-![SliderFinalCadastro](https://github.com/user-attachments/assets/2bfe4756-e451-48c1-868f-8ebb0a6b240f)
+![SliderFinalCadastro](https://github.com/user-attachments/assets/bdd201c8-572e-4ea0-8301-1333df05ce09)
 
 ## Feedback
 
