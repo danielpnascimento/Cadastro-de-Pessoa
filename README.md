@@ -37,6 +37,8 @@
 
 [Site de Resort](https://dnmontanharesort.netlify.app/)
 
+![SliderFinalCadastro](https://github.com/user-attachments/assets/4c8aae2f-6e69-4f5c-b236-b5a204e0499a)
+
 ## Feedback
 
 Se você tiver algum feedback, por favor me informe por meio da box daniel.p.nasciment@gmail.com
