@@ -9,7 +9,7 @@ public interface CadastroRepository  extends JpaRepository<Cadastro, Long> {
 
     public List<Cadastro> findByNome(String nome);
 
-    // NOVIDADE: VERIFICA SE CPF JÁ EXISTE
     boolean existsByCpf(String cpf);
+    boolean existsByRg(String rg);
 
 }

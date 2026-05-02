@@ -50,12 +50,10 @@ export class ListagemComponent implements OnInit {
   ];
 
   profissaoMap: { [key: string]: string } = {};
-
   constructor(private cadastroService: CadastroService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.profissaoMap = Object.fromEntries(this.profissoes.map(p => [p.value, p.text]));
-
     this.loadCadastros();
 
     const offcanvasEl = document.getElementById('offcanvasCadastro');
@@ -112,7 +110,7 @@ export class ListagemComponent implements OnInit {
   getItemsPaginated() {
     const pSize = Number(this.pageSize);
     const start = (this.currentPage - 1) * this.pageSize;
-    return this.listaFiltrada.slice(start, start + pSize);
+    return this.listaFiltrada.slice(start, start + this.pageSize);
   }
   get totalPagesArray() {
     return Array(this.totalPages).fill(0).map((_, i) => i + 1);
@@ -157,7 +155,6 @@ export class ListagemComponent implements OnInit {
     if (this.pendingReload) this.pendingReload = false;
     this.fecharOffcanvas();
 
-
     setTimeout(() => {
       this.cadastroService.findById(cadastro.id as number).subscribe({
         next: srv => {
@@ -196,6 +193,7 @@ export class ListagemComponent implements OnInit {
                 title: String(msg || 'Registro deletado'),
                 icon: 'success', confirmButtonText: 'Ok'
               });
+
               this.lista = this.lista.filter(x => x.id !== c.id);
               this.filtrarCadastros(this.searchControl.value || '');
               this.totalPages = Math.max(1, Math.ceil(this.listaFiltrada.length / this.pageSize));

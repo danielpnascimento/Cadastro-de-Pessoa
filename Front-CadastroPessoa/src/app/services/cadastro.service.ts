@@ -9,21 +9,16 @@ import { tap } from 'rxjs/operators';
 })
 export class CadastroService {
 
-  // 4° passo Criar a injeção assincrona e seu import '@angular/core'
   http = inject(HttpClient);
 
-  // Criando um variável para abreviar a rota de saida do back
   API = "http://localhost:8080/api/cadastro";
 
-  // Notifier para que componentes interessados possam reagir a alterações (save/update/delete)
   changed: Subject<void> = new Subject<void>();
 
   constructor() { }
 
-  // *******ENDPOINTs "LISTAR e DELETAR"*******
-  // Metodo que ira usar os dados do bd do back
-  // E que faz a tabela do front ser carregada pelo dados do banco
   listAll(): Observable<Cadastro[]> {
+
     return this.http.get<Cadastro[]>(this.API + "/listAll").pipe(
       map(cadastros => cadastros.map(cadastro => ({
         ...cadastro,
@@ -32,7 +27,7 @@ export class CadastroService {
     );
   }
 
-  // SELEÇÃO POR ID
+
   findById(id: number): Observable<Cadastro> {
     return this.http.get<Cadastro>(this.API + "/findById/" + id).pipe(
       map(cadastro => ({
@@ -42,7 +37,6 @@ export class CadastroService {
     );
   }
 
-  // SALVAR
   save(cadastro: Cadastro): Observable<string> {
     return this.http.post<string>(this.API + "/save", cadastro,
       { responseType: 'text' as 'json' }).pipe(
@@ -50,7 +44,6 @@ export class CadastroService {
       );
   }
 
-  // UPDATE
   update(cadastro: Cadastro, id: number): Observable<string> {
     return this.http.put<string>(this.API + "/update/" + id, cadastro,
       { responseType: 'text' as 'json' }).pipe(
@@ -58,10 +51,8 @@ export class CadastroService {
       );
   }
 
-  // DELETAR
   delete(id: number): Observable<string> {
     return this.http.delete<string>(this.API + "/delete/" + id,
-      //Quando usar retorno com string
       { responseType: 'text' as 'json' }).pipe(
         tap(() => this.changed.next())
       );

@@ -12,11 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cadastro")
-@CrossOrigin("*") // Quando for para produção seta o ip do front ex.(origins = "http://localhost:4200")
+@CrossOrigin("*")
 public class CadastroController {
 
-    // Anotação do autowired do spring para não usar o new de instanciação
-    // onde a service manda para controller que recebe e envia!
     @Autowired
     private CadastroService cadastroService;
 
@@ -25,14 +23,11 @@ public class CadastroController {
         System.out.println("Foto recebida (raw): " + cadastro.getFoto());
         System.out.println("Tamanho da foto (caracteres): " + (cadastro.getFoto() != null ? cadastro.getFoto().length() : 0));
         try {
-            // pra logar o objeto completo.
             System.out.println("JSON recebido: " + cadastro);
-            // Logar o valor recebido para foto
             System.out.println("Foto recebida (raw): " + cadastro.getFoto());
-            // Loga a foto e seu tamanho
             System.out.println("Foto recebida (raw): " + cadastro.getFoto());
             System.out.println("Tamanho da foto (caracteres): " + (cadastro.getFoto() != null ? cadastro.getFoto().length() : 0));
-            // Valida e limpa a string Base64 da foto
+
             if (cadastro.getFoto() != null && !cadastro.getFoto().isEmpty()) {
                 String base64String = cadastro.getFoto().replaceAll("\\s+", "");
                 try {
@@ -43,11 +38,9 @@ public class CadastroController {
                     return new ResponseEntity<>("Erro: Formato de foto inválido. Deve ser uma string Base64 válida.", HttpStatus.BAD_REQUEST);
                 }
             } else {
-                cadastro.setFoto(null); // Garante que foto seja null se não for enviada
+                cadastro.setFoto(null);
             }
-            // msg de ok Salva o cadastro e msg de erro
             String mensagem = this.cadastroService.save(cadastro);
-            // método ok faz parte do create
             return new ResponseEntity<>(mensagem, HttpStatus.OK);
             // Trata CPF duplicado
         } catch (org.springframework.dao.DataIntegrityViolationException e) {
@@ -56,7 +49,7 @@ public class CadastroController {
             }
             return new ResponseEntity<>("Erro ao salvar: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            e.printStackTrace(); // Loga o erro completo no console do backend
+            e.printStackTrace();
             return new ResponseEntity<>("Erro ao salvar: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -70,7 +63,7 @@ public class CadastroController {
         try {
             System.out.println("JSON recebido: " + cadastro);
             System.out.println("Foto recebida (raw): " + cadastro.getFoto());
-            // if para a conversão Base64 para a foto byte[]
+
             if (cadastro.getFoto() != null && !cadastro.getFoto().isEmpty()) {
                 try {
                     String base64String = cadastro.getFoto().replaceAll("\\s+", "");
@@ -87,7 +80,7 @@ public class CadastroController {
             String mensagem = this.cadastroService.update(cadastro, id);
             return new ResponseEntity<>(mensagem, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace(); // Loga o erro completo no console do backend
+            e.printStackTrace();
             return new ResponseEntity<>("Erro ao atualizar: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -125,7 +118,7 @@ public class CadastroController {
     }
 
     @GetMapping("/findByNome")
-    // Usando um Parâmetro para busca no postman
+
     public ResponseEntity<List<Cadastro>> findByNome(@RequestParam String nome) {
         try {
             List<Cadastro> lista = this.cadastroService.findByNome(nome);
@@ -134,5 +127,6 @@ public class CadastroController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+
 }
 

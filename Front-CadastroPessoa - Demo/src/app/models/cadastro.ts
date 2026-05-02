@@ -1,8 +1,8 @@
 
 export class Cadastro {
 
-  id: number | null = null;
-  foto: string | null = null;
+  id: number | null = null; 
+  foto: string | null; 
   nome!: string;
   cpf!: string;
   rg!: string;
@@ -31,7 +31,7 @@ export class Cadastro {
 
   constructor(
     id: number | null = null,
-    foto: string | null = null,
+    foto: string | null = null, 
     nome: string = '',
     cpf: string = '',
     rg: string = '',

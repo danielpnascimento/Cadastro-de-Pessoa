@@ -1,44 +1,26 @@
 package com.Back_CadastroPessoa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
-
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Getter
-//@Setter
-
-//Desativei o lombok para confirmar tudo
 
 @Entity
 @Table(name = "cadastro")
 public class Cadastro implements Serializable {
 
     @Id
-    // GenerationType.IDENTITY deixa o banco gerar o valor automaticamente
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @Column(length = 100000) // Ajuste o tamanho conforme necessário
-    // private String foto; modo errado
-    // private byte[] foto; //(para Data URL) ou byte[] (para BLOB).
-    // Armazenar Base64 como texto longo (LONGTEXT) é ideal pró H2 e compatível com MySQL, evitando erro de tamanho.
     @Column(columnDefinition = "LONGTEXT")
-    private String foto; // Alterado de byte[] para String de volta
-    // Cada campo tem @Column(nullable = false) — o que força o banco a exigir preenchimento.
+    private String foto;
     @Column(nullable = false)
     private String nome;
 
-    // unique = true no CPF, garantindo unicidade na tabela.
-    @Column(nullable = false, unique = true)
+        @Column(nullable = false, unique = true)
     private String cpf;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String rg;
 
     @Column(nullable = false)
@@ -48,7 +30,7 @@ public class Cadastro implements Serializable {
     private String pais;
 
     @Column(nullable = false)
-    private String nascimento; // Mantenha como String se o frontend envia DD/MM/YYYY
+    private String nascimento;
 
     @Column(nullable = false)
     private String sexo;
@@ -102,7 +84,6 @@ public class Cadastro implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String textarea;
 
-    // Construtores
     public Cadastro() {
     }
 
