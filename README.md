@@ -33,7 +33,6 @@
 - Contador automático de total de itens da tabela.
 
 ## Imagens do projeto:
-<img width="1680" height="6004" alt="SliderFinalCadastroV2" src="https://github.com/user-attachments/assets/6b94d97c-26b4-428c-9700-ed77dbc75076" />
 
 ![SliderFinalCadastroV2](https://github.com/user-attachments/assets/6b94d97c-26b4-428c-9700-ed77dbc75076)
 
@@ -45,9 +44,8 @@
 
 [Site de Resort](https://dnmontanharesort.netlify.app/)
 
-[Sistema ERP](https://web-inventory-erp-demo.netlify.app/#/)
+[Sistema ERP](https://web-inventory-erp-demo.netlify.app/)
 
-![SliderFinalCadastro](https://github.com/user-attachments/assets/bdd201c8-572e-4ea0-8301-1333df05ce09)
 
 ## Feedback
 
