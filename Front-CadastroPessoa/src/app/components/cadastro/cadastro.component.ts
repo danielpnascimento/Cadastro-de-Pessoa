@@ -386,6 +386,7 @@ export class CadastroComponent implements OnInit, OnChanges {
       nomemae: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
 
+      // Endereço
       cep: ['', [Validators.required, Validators.pattern(/^\d{5}-\d{3}$/)]],
       bairro: ['', Validators.required],
       rua: ['', Validators.required],
@@ -419,6 +420,7 @@ export class CadastroComponent implements OnInit, OnChanges {
       const safe = (value ?? '').toString();
       const digits = safe.replace(/\D/g, '').substring(0, 11);
 
+      // --- formatação visual ---
       let formatted = digits;
       if (digits.length > 9) {
         formatted = digits.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
@@ -526,7 +528,6 @@ export class CadastroComponent implements OnInit, OnChanges {
       }
     });
 
-    // Formata telefone recado automaticamente
     this.form.get('telefoneRec')?.valueChanges.subscribe(value => {
       const safe = (value ?? '').toString();
       const digits = safe.replace(/\D/g, '').substring(0, 11);
@@ -561,7 +562,12 @@ export class CadastroComponent implements OnInit, OnChanges {
 
   }
 
+
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cadastroSeletor']) {
+      this.activeTab = 'dados';
+    }
+
     if (changes['cadastroSeletor'] && this.form && this.cadastroSeletor && this.cadastroSeletor.id) {
       const fotoRaw = this.normalizeFoto(this.cadastroSeletor.foto);
       this.form.patchValue({ ...this.cadastroSeletor, foto: fotoRaw });
@@ -571,8 +577,8 @@ export class CadastroComponent implements OnInit, OnChanges {
           : `data:image/jpeg;base64,${this.cadastroSeletor.foto}`
         : null;
       this.setCpfRgDisabled(true);
-    } 
-    
+    }
+
     else if (changes['cadastroSeletor'] && this.form && (!this.cadastroSeletor || !this.cadastroSeletor.id)) {
       this.form.reset();
       this.fotoPreview = null;
@@ -586,6 +592,7 @@ export class CadastroComponent implements OnInit, OnChanges {
       if (this.cadastroSeletor.foto) {
         this.cadastroSeletor.foto = this.normalizeFoto(this.cadastroSeletor.foto as string) as string;
       }
+
       const cadastroId = this.cadastroSeletor.id ? Number(this.cadastroSeletor.id) : null;
       const isUpdate = cadastroId && cadastroId > 0;
 
@@ -614,14 +621,10 @@ export class CadastroComponent implements OnInit, OnChanges {
             });
           },
           error: erro => {
-            const backendMsg = typeof erro.error === 'string'
+            const msg = erro.message || (typeof erro.error === 'string'
               ? erro.error
-              : (erro.error?.message ? erro.error.message : JSON.stringify(erro.error));
-            const isValidationMsg = backendMsg && (
-              backendMsg.toLowerCase().includes('cpf') ||
-              backendMsg.toLowerCase().includes('rg')
-            );
-            const msg = isValidationMsg ? backendMsg : `Erro ao atualizar: ${backendMsg}`;
+              : (erro.error?.message ? erro.error.message : "Erro ao atualizar"));
+
             Swal.fire({ title: msg, icon: 'error', confirmButtonText: 'Ok' });
           }
         });
@@ -640,16 +643,10 @@ export class CadastroComponent implements OnInit, OnChanges {
             });
           },
           error: erro => {
-            const backendMsg = typeof erro.error === 'string'
+            const msg = erro.message || (typeof erro.error === 'string'
               ? erro.error
-              : (erro.error?.message ? erro.error.message : JSON.stringify(erro.error));
+              : (erro.error?.message ? erro.error.message : "Erro ao salvar"));
 
-            const isValidationMsg = backendMsg && (
-              backendMsg.toLowerCase().includes('cpf') ||
-              backendMsg.toLowerCase().includes('rg')
-            );
-
-            const msg = isValidationMsg ? backendMsg : `Erro ao salvar: ${backendMsg}`;
             Swal.fire({ title: msg, icon: 'error', confirmButtonText: 'Ok' });
           }
         });
@@ -658,6 +655,8 @@ export class CadastroComponent implements OnInit, OnChanges {
 
     else {
       this.form.markAllAsTouched();
+      this.form.get('cpf')?.markAsTouched();
+      this.form.get('rg')?.markAsTouched();
       const missing = this.getMissingRequiredFields();
       if (missing.length) {
         const html = `<p>Preencha os campos obrigatórios:</p><ul style="text-align:left">${missing.map(f => `<li>${f}</li>`).join('')}</ul>`;
@@ -697,6 +696,8 @@ export class CadastroComponent implements OnInit, OnChanges {
       this.save();
     } else if (this.form) {
       this.form.markAllAsTouched();
+      this.form.get('cpf')?.markAsTouched();
+      this.form.get('rg')?.markAsTouched();
     } else {
       Swal.fire({ title: 'Erro: Formulário não inicializado', icon: 'error', confirmButtonText: 'Ok' });
     }
@@ -754,8 +755,9 @@ export class CadastroComponent implements OnInit, OnChanges {
     this.activeTab = tab;
   }
 
+
   validarCPF(cpf: string): boolean {
-    if (!cpf || cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false; // todos iguais
+    if (!cpf || cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
     let soma = 0;
     for (let i = 0; i < 9; i++) soma += parseInt(cpf[i]) * (10 - i);
     let resto = (soma * 10) % 11;
@@ -819,7 +821,6 @@ export class CadastroComponent implements OnInit, OnChanges {
       this.fotoPreview = null;
       return;
     }
-
     const reader = new FileReader();
     reader.onload = () => {
       let base64String = reader.result as string;
@@ -827,6 +828,7 @@ export class CadastroComponent implements OnInit, OnChanges {
       if (base64String.includes(',')) {
         base64String = base64String.split(',')[1];
       }
+
       const base64Regex = /^[A-Za-z0-9+/=]+$/;
       if (!base64Regex.test(base64String)) {
         Swal.fire({ title: 'Erro na imagem', icon: 'error', confirmButtonText: 'Ok' });
@@ -834,6 +836,7 @@ export class CadastroComponent implements OnInit, OnChanges {
         this.fotoPreview = null;
         return;
       }
+
       base64String = base64String.replace(/\s/g, '');
       this.form.patchValue({ foto: base64String });
       this.fotoPreview = `data:image/jpeg;base64,${base64String}`;
@@ -846,7 +849,6 @@ export class CadastroComponent implements OnInit, OnChanges {
     };
     reader.readAsDataURL(file);
   }
-
 
   buscarCEP() {
     const cepVal = this.form.get('cep')?.value ?? '';
@@ -873,7 +875,7 @@ export class CadastroComponent implements OnInit, OnChanges {
         }
         this.loadingCEP = false;
       },
-      
+
       error: () => {
         this.erroCEP = 'Erro ao buscar CEP.';
         this.loadingCEP = false;
@@ -885,6 +887,7 @@ export class CadastroComponent implements OnInit, OnChanges {
   get cidadeAtual(): string {
     return this.form.get('cidades')?.value || '';
   }
+
   isCidadeAtualForaDaLista(): boolean {
     const cidade = this.cidadeAtual;
     return cidade ? !this.cidades.some(c => c.value === cidade) : false;

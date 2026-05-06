@@ -564,6 +564,10 @@ export class CadastroComponent implements OnInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cadastroSeletor']) {
+      this.activeTab = 'dados';
+    }
+
     if (changes['cadastroSeletor'] && this.form && this.cadastroSeletor && this.cadastroSeletor.id) {
       const fotoRaw = this.normalizeFoto(this.cadastroSeletor.foto);
       this.form.patchValue({ ...this.cadastroSeletor, foto: fotoRaw });
@@ -651,6 +655,8 @@ export class CadastroComponent implements OnInit, OnChanges {
 
     else {
       this.form.markAllAsTouched();
+      this.form.get('cpf')?.markAsTouched();
+      this.form.get('rg')?.markAsTouched();
       const missing = this.getMissingRequiredFields();
       if (missing.length) {
         const html = `<p>Preencha os campos obrigatórios:</p><ul style="text-align:left">${missing.map(f => `<li>${f}</li>`).join('')}</ul>`;
@@ -690,6 +696,8 @@ export class CadastroComponent implements OnInit, OnChanges {
       this.save();
     } else if (this.form) {
       this.form.markAllAsTouched();
+      this.form.get('cpf')?.markAsTouched();
+      this.form.get('rg')?.markAsTouched();
     } else {
       Swal.fire({ title: 'Erro: Formulário não inicializado', icon: 'error', confirmButtonText: 'Ok' });
     }

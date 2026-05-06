@@ -68,7 +68,7 @@
         <input type="text" id="cpf" formControlName="cpf" class="form-control rounded-pill shadow-sm bg-light"
           placeholder=" " required [ngClass]="{
       'is-invalid': form.get('cpf')?.invalid && form.get('cpf')?.touched,
-      'is-valid': form.get('cpf')?.valid && form.get('cpf')?.touched
+      'is-valid': (form.get('cpf')?.valid || form.get('cpf')?.disabled) && form.get('cpf')?.touched
       }" />
         <label class="form-label nowrap-text" for="cpf">CPF</label>
         <div *ngIf="form.get('cpf')?.invalid && form.get('cpf')?.touched" class="invalid-feedback d-block nowrap-text">
@@ -81,7 +81,7 @@
         <input type="text" id="rg" formControlName="rg" class="form-control rounded-pill shadow-sm bg-light"
           placeholder=" " required [ngClass]="{
       'is-invalid': form.get('rg')?.invalid && form.get('rg')?.touched,
-      'is-valid': form.get('rg')?.valid && form.get('rg')?.touched
+      'is-valid': (form.get('rg')?.valid || form.get('rg')?.disabled) && form.get('rg')?.touched
     }" />
         <label class="form-label nowrap-text" for="rg">RG</label>
         <div *ngIf="form.get('rg')?.invalid && form.get('rg')?.touched" class="invalid-feedback d-block nowrap-text">
@@ -272,7 +272,7 @@
     </div>
 
     <!-- Nome completo do Pai -->
-    <div class="form-outline w-100 ">
+    <div class="form-outline w-75 mx-auto">
       <input type="text" id="nomepai" formControlName="nomepai" class="form-control rounded-pill shadow-sm bg-light"
         placeholder=" " required [ngClass]="{
       'is-invalid': form.get('nomepai')?.invalid && form.get('nomepai')?.touched,
@@ -288,14 +288,14 @@
     </div>
 
     <!-- Nome completo da Mãe -->
-    <div class="form-outline w-100">
+    <div class="form-outline w-75 mx-auto">
       <input type="text" id="nomemae" formControlName="nomemae" class="form-control rounded-pill shadow-sm bg-light"
         placeholder=" " required [ngClass]="{
       'is-invalid': form.get('nomemae')?.invalid && form.get('nomemae')?.touched,
       'is-valid': form.get('nomemae')?.valid && form.get('nomemae')?.touched
     }" (keypress)="permitirSomenteLetras($event)" (paste)="onPasteLetters($event)" />
 
-      <label for="nomemae" class="form-label nowrap-text">Nome completo do Mãe</label>
+      <label for="nomemae" class="form-label nowrap-text">Nome completo da Mãe</label>
 
       <div *ngIf="form.get('nomemae')?.invalid && form.get('nomemae')?.touched"
         class="invalid-feedback d-block nowrap-text">
@@ -305,7 +305,7 @@
 
 
     <!-- Email -->
-    <div class="form-outline w-100">
+    <div class="form-outline w-75 mx-auto">
       <input type="email" id="email" formControlName="email"
         class="form-control rounded-pill shadow-sm bg-light nowrap-text" placeholder=" " required [ngClass]="{
       'is-invalid': form.get('email')?.invalid && form.get('email')?.touched,
@@ -314,9 +314,9 @@
 
       <label for="email" class="form-label nowrap-text">Email</label>
 
-      <div *ngIf="form.get('nomepai')?.invalid && form.get('nomepai')?.touched"
+      <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
         class="invalid-feedback d-block nowrap-text">
-        Informe um nome válido (somente letras)
+        Informe um e-mail válido
       </div>
     </div>
 
@@ -451,7 +451,7 @@
       </div>
 
       <!-- Complemento de residência-->
-      <div class="form-outline w-50 ">
+      <div class="form-outline w-compl ">
         <input type="text" id="complemento" formControlName="complemento" placeholder=" "
           class="form-control rounded-pill shadow-sm bg-light" [ngClass]="{
         'is-invalid': form.get('complemento')?.invalid && form.get('complemento')?.touched,
@@ -470,7 +470,7 @@
       <textarea type="text" id="textarea" formControlName="textarea" placeholder=" "
         class="form-control rounded-6 shadow-sm bg-light" [ngClass]="{
         'is-invalid': form.get('textarea')?.invalid && form.get('textarea')?.touched,
-        'is-valid': form.get('')?.valid && form.get('')?.touched
+        'is-valid': form.get('textarea')?.valid && form.get('textarea')?.touched
         }" required></textarea>
       <label for="textarea" class="form-label nowrap-text ">Referência: Travessa, Esquina, Av. ou Rua.</label>
       <div *ngIf="form.get('textarea')?.invalid && form.get('textarea')?.touched"
@@ -481,3 +481,4 @@
   </div>
 
 </form>
+
