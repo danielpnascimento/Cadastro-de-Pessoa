@@ -243,19 +243,13 @@ textarea {
       justify-content: center !important;
     }
 
-    .form-outline .w-100,
-    .w-cep {
-      width: 100% !important;
-      margin-right: 0 !important;
-    }
-
     .d-flex:has(.photo-container) .form-outline.w-100 {
       flex: 1;
       min-width: 200px;
     }
 
     .w-cpf {
-      width: 180px !important;
+      width: 200px !important;
       margin-right: 0 !important;
     }
 
