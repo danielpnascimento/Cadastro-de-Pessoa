@@ -236,17 +236,12 @@ textarea {
 
 
 @media (max-width: 414px) {
+
   form.text-center {
     .d-flex:not(.nav) {
       flex-wrap: wrap !important;
       gap: 8px !important;
       justify-content: center !important;
-    }
-
-    .form-outline .w-100,
-    .w-cep {
-      width: 100% !important;
-      margin-right: 0 !important;
     }
 
     .d-flex:has(.photo-container) .form-outline.w-100 {
@@ -255,12 +250,16 @@ textarea {
     }
 
     .w-cpf {
-      width: 145px !important;
+      width: 155px !important;
       margin-right: 0 !important;
     }
 
     .w-rg,
-    .w-nascimento,
+    .w-nascimento {
+      width: 155px !important;
+      margin-right: 0 !important;
+    }
+
     .w-sexo {
       width: 130px !important;
       margin-right: 0 !important;
@@ -307,7 +306,6 @@ textarea {
     .nowrap-text {
       white-space: normal !important;
     }
-
   }
 }
 
