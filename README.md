@@ -1,4 +1,4 @@
-# 🚀 Módulo de Cadastro de Pessoa Finalizado!
+# 🚀 Módulo de Cadastro de Pessoa com API de CEP!
 
 ## 🛠 Construção
 **Front-end:**
